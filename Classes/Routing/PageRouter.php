@@ -32,11 +32,11 @@ class PageRouter extends \TYPO3\CMS\Core\Routing\PageRouter
         $enhancers = [];
         foreach ($this->site->getConfiguration()['routeEnhancers'] ?? [] as $enhancerConfiguration) {
             $limitToPages = $enhancerConfiguration['limitToPages'] ?? [];
-            if (!is_array($limitToPages)) {
-                $limitToPages = GeneralUtility::intExplode(',', (string)$limitToPages);
+            if (is_string($limitToPages)) {
+                $limitToPages = GeneralUtility::intExplode(',', $limitToPages);
             }
             // Check if there is a restriction to page Ids.
-            if (!in_array($pageId, $limitToPages, false)) {
+            if (is_array($limitToPages) && !empty($limitToPages) && !in_array($pageId, $limitToPages, true)) {
                 continue;
             }
             $enhancerType = $enhancerConfiguration['type'] ?? '';

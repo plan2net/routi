@@ -93,82 +93,50 @@ class PersistedJoinAliasMapper extends PersistedAliasMapper
     }
 
     /**
-     * @param QueryBuilder $queryBuilder
-     * @param array $values
-     * @return array
+     * @param string $value
+     * @return array|null
      */
-    protected function createFieldConstraintsGenerate(QueryBuilder $queryBuilder, array $values): array
+    protected function findByIdentifier(string $value): ?array
     {
-        $constraints = [];
-        foreach ($values as $fieldName => $fieldValue) {
-            $constraints[] = $queryBuilder->expr()->eq(
-                $this->tableName . '.' . $fieldName,
-                $queryBuilder->createNamedParameter(
-                    $fieldValue
-                )
-            );
-        }
-
-        return $constraints;
-    }
-
-    /**
-     * @param QueryBuilder $queryBuilder
-     * @param array $values
-     * @return array
-     */
-    protected function createFieldConstraintsResolve(QueryBuilder $queryBuilder, array $values): array
-    {
-        $constraints = [];
-        foreach ($values as $fieldName => $fieldValue) {
-            $constraints[] = $queryBuilder->expr()->eq(
-                $this->joinTableName . '.' . $fieldName,
-                $queryBuilder->createNamedParameter(
-                    $fieldValue
-                )
-            );
-        }
-
-        return $constraints;
-    }
-
-    /**
-     * @return PersistenceDelegate
-     */
-    protected function getPersistenceDelegate(): PersistenceDelegate
-    {
-        if ($this->persistenceDelegate !== null) {
-            return $this->persistenceDelegate;
-        }
-        /** @var QueryBuilder $queryBuilder */
-        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
-            ->getQueryBuilderForTable($this->tableName);
-
-        $queryBuilder = $queryBuilder
-            ->from($this->tableName)
+        $queryBuilder = $this->createQueryBuilder();
+        $result = $queryBuilder
+            ->select(...$this->persistenceFieldNames)
             ->join(
                 $this->tableName,
                 $this->joinTableName,
                 $this->joinTableName,
                 $this->joinCondition
-            );
-        // @todo Restrictions (Hidden? Workspace?)
+            )
+            ->where($queryBuilder->expr()->eq(
+                $this->tableName . '.uid',
+                $queryBuilder->createNamedParameter($value, \PDO::PARAM_INT)
+            ))
+            ->execute()
+            ->fetch();
+        return $result !== false ? $result : null;
+    }
 
-        $resolveModifier = function (QueryBuilder $queryBuilder, array $values) {
-            return $queryBuilder->select(...$this->persistenceFieldNames)->where(
-                ...$this->createFieldConstraintsResolve($queryBuilder, $values)
-            );
-        };
-        $generateModifier = function (QueryBuilder $queryBuilder, array $values) {
-            return $queryBuilder->select(...$this->persistenceFieldNames)->where(
-                ...$this->createFieldConstraintsGenerate($queryBuilder, $values)
-            );
-        };
-
-        return $this->persistenceDelegate = new PersistenceDelegate(
-            $queryBuilder,
-            $resolveModifier,
-            $generateModifier
-        );
+    /**
+     * @param string $value
+     * @return array|null
+     */
+    protected function findByRouteFieldValue(string $value): ?array
+    {
+        $queryBuilder = $this->createQueryBuilder();
+        $result = $queryBuilder
+            ->select(...$this->persistenceFieldNames)
+            ->join(
+                $this->tableName,
+                $this->joinTableName,
+                $this->joinTableName,
+                $this->joinCondition
+            )
+            ->where($queryBuilder->expr()->eq(
+                $this->joinTableName . '.' . $this->routeFieldName,
+                $queryBuilder->createNamedParameter($value, \PDO::PARAM_STR)
+            ))
+            ->execute()
+            ->fetch();
+        return $result !== false ? $result : null;
     }
 }
