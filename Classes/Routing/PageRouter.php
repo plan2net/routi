@@ -44,7 +44,8 @@ class PageRouter extends \TYPO3\CMS\Core\Routing\PageRouter
             if (!empty($enhancerConfiguration['aspects'] ?? null)) {
                 $aspects = $this->aspectFactory->createAspects(
                     $enhancerConfiguration['aspects'],
-                    $language
+                    $language,
+                    $this->site
                 );
                 $enhancer->setAspects($aspects);
             }
