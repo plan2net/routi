@@ -1,4 +1,6 @@
-<?php
+<?php /** @noinspection PhpMissingFieldTypeInspection */
+/** @noinspection TraitsPropertiesConflictsInspection */
+
 declare(strict_types=1);
 
 namespace Plan2net\Routi\Routing\Aspect;
@@ -35,7 +37,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class PersistedJoinAliasMapper extends PersistedAliasMapper
 {
-    // this is required, because the AspectFactory checks for this trait
+    // This is required, because the AspectFactory checks for this trait
     // with 'class_uses' and this does not work for inherited classes
     // using a trait
     use SiteLanguageAwareTrait;
@@ -92,10 +94,6 @@ class PersistedJoinAliasMapper extends PersistedAliasMapper
         ]);
     }
 
-    /**
-     * @param string $value
-     * @return array|null
-     */
     protected function findByIdentifier(string $value): ?array
     {
         $queryBuilder = $this->createQueryBuilder();
@@ -112,14 +110,11 @@ class PersistedJoinAliasMapper extends PersistedAliasMapper
                 $queryBuilder->createNamedParameter($value, \PDO::PARAM_INT)
             ))
             ->execute()
-            ->fetch();
+            ->fetchAssociative();
+
         return $result !== false ? $result : null;
     }
 
-    /**
-     * @param string $value
-     * @return array|null
-     */
     protected function findByRouteFieldValue(string $value): ?array
     {
         $queryBuilder = $this->createQueryBuilder();
@@ -136,7 +131,8 @@ class PersistedJoinAliasMapper extends PersistedAliasMapper
                 $queryBuilder->createNamedParameter($value, \PDO::PARAM_STR)
             ))
             ->execute()
-            ->fetch();
+            ->fetchAssociative();
+
         return $result !== false ? $result : null;
     }
 }

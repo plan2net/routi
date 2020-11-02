@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Plan2net\Routi\Routing;
@@ -23,8 +24,6 @@ class PageRouter extends \TYPO3\CMS\Core\Routing\PageRouter
      * Fetch possible enhancers + aspects based on the current page configuration and
      * the site configuration put into "routeEnhancers".
      *
-     * @param int $pageId
-     * @param SiteLanguage $language
      * @return EnhancerInterface[]
      */
     protected function getEnhancersForPage(int $pageId, SiteLanguage $language): array

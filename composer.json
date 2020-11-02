@@ -3,7 +3,8 @@
   "description": "The little TYPO3 CMS routing helpers",
   "type": "typo3-cms-extension",
   "require": {
-    "typo3/cms-core": "^9.5.16"
+    "ext-pdo": "*",
+    "typo3/cms-core": "^9.5.16 || ^10.4"
   },
   "autoload": {
     "psr-4": {

@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpMissingFieldTypeInspection */
+
 declare(strict_types=1);
 
 namespace Plan2net\Routi\Routing\Aspect;
@@ -40,27 +41,18 @@ class StaticIntegerRangeMapper implements StaticMappableAspectInterface, \Counta
         $this->end = (int)$settings['end'];
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function count()
+    public function count(): int
     {
         return $this->end - $this->start;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function generate(string $value): ?string
     {
-        return (int)$value >= $this->start && (int)$value <= $this->end ? $value : null;
+        return (int) $value >= $this->start && (int) $value <= $this->end ? $value : null;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function resolve(string $value): ?string
     {
-        return (int)$value >= $this->start && (int)$value <= $this->end ? $value : null;
+        return (int) $value >= $this->start && (int) $value <= $this->end ? $value : null;
     }
 }
