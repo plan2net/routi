@@ -4,11 +4,16 @@
   "type": "typo3-cms-extension",
   "require": {
     "ext-pdo": "*",
-    "typo3/cms-core": "^9.5.16 || ^10.4"
+    "typo3/cms-core": "^9.5.16 || ^10.4 || ^11.5"
   },
   "autoload": {
     "psr-4": {
       "Plan2net\\Routi\\": "Classes"
+    }
+  },
+  "extra": {
+    "typo3/cms": {
+      "extension-key": "routi"
     }
   }
 }

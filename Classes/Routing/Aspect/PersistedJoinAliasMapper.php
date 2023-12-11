@@ -5,12 +5,10 @@ declare(strict_types=1);
 
 namespace Plan2net\Routi\Routing\Aspect;
 
-use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use Doctrine\DBAL\Driver\Exception;
 use TYPO3\CMS\Core\Routing\Aspect\PersistedAliasMapper;
 use TYPO3\CMS\Core\Routing\Aspect\PersistenceDelegate;
 use TYPO3\CMS\Core\Site\SiteLanguageAwareTrait;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class PersistedJoinAliasMapper
@@ -94,6 +92,10 @@ class PersistedJoinAliasMapper extends PersistedAliasMapper
         ]);
     }
 
+    /**
+     * @throws Exception
+     * @throws \Exception
+     */
     protected function findByIdentifier(string $value): ?array
     {
         $queryBuilder = $this->createQueryBuilder();
@@ -115,6 +117,10 @@ class PersistedJoinAliasMapper extends PersistedAliasMapper
         return $result !== false ? $result : null;
     }
 
+    /**
+     * @throws Exception
+     * @throws \Exception
+     */
     protected function findByRouteFieldValue(string $value): ?array
     {
         $queryBuilder = $this->createQueryBuilder();
