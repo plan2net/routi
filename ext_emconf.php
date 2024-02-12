@@ -3,7 +3,7 @@
 $EM_CONF['routi'] = [
     'title' => 'Routi',
     'description' => 'The little TYPO3 CMS routing helpers',
-    'version' => '2.3.0',
+    'version' => '2.3.1',
     'state' => 'stable',
     'clearcacheonload' => true,
     'author' => 'Wolfgang Klinger',
