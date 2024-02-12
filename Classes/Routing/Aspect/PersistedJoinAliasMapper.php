@@ -87,8 +87,8 @@ class PersistedJoinAliasMapper extends PersistedAliasMapper
             $this->tableName . '.uid',
             $this->tableName . '.pid',
             $this->joinTableName . '.' . $this->routeFieldName,
-            $GLOBALS['TCA'][$this->tableName]['ctrl']['languageField'] ? $this->tableName . '.' . $GLOBALS['TCA'][$this->tableName]['ctrl']['languageField'] : null,
-            $GLOBALS['TCA'][$this->tableName]['ctrl']['transOrigPointerField'] ? $this->tableName . '.' . $GLOBALS['TCA'][$this->tableName]['ctrl']['transOrigPointerField'] : null,
+            isset($GLOBALS['TCA'][$this->tableName]['ctrl']['languageField']) ? $this->tableName . '.' . $GLOBALS['TCA'][$this->tableName]['ctrl']['languageField'] : null,
+            isset($GLOBALS['TCA'][$this->tableName]['ctrl']['transOrigPointerField']) ? $this->tableName . '.' . $GLOBALS['TCA'][$this->tableName]['ctrl']['transOrigPointerField'] : null,
         ]);
     }
 
