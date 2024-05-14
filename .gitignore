@@ -1,0 +1,6 @@
+/vendor
+/public
+/.Build
+.idea/
+composer.lock
+*.swp

@@ -9,14 +9,9 @@ use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * Class PageRouter
- *
  * Explode 'limitToPages' if it is a string to allow a configuration like
  *  limitToPages: '%env(TYPO3_SOME_PID_LIST)%'
  * with a list of pages defined in a .env file.
- *
- * @package Plan2net\Routi\Routing
- * @author Wolfgang Klinger <wk@plan2.net>
  */
 class PageRouter extends \TYPO3\CMS\Core\Routing\PageRouter
 {

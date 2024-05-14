@@ -1,5 +1,7 @@
-<?php /** @noinspection PhpMissingFieldTypeInspection */
-/** @noinspection TraitsPropertiesConflictsInspection */
+<?php
+
+/** @noinspection PhpMissingFieldTypeInspection */
+/* @noinspection TraitsPropertiesConflictsInspection */
 
 declare(strict_types=1);
 
@@ -7,31 +9,10 @@ namespace Plan2net\Routi\Routing\Aspect;
 
 use Doctrine\DBAL\Driver\Exception;
 use TYPO3\CMS\Core\Routing\Aspect\PersistedAliasMapper;
-use TYPO3\CMS\Core\Routing\Aspect\PersistenceDelegate;
 use TYPO3\CMS\Core\Site\SiteLanguageAwareTrait;
 
 /**
- * Class PersistedJoinAliasMapper
- * @package Plan2net\Routi\Routing\Aspect
- * @author Wolfgang Klinger <wk@plan2.net>
- *
- * Example:
- *   routeEnhancers:
- *     EventsPlugin:
- *       type: Extbase
- *       extension: Events2
- *       plugin: Pi1
- *       routes:
- *         - { routePath: '/clip/{clip}', _controller: 'Controller::detail', _arguments: {'clip': 'file_id'} }
- *       defaultController: 'Controller::list'
- *       aspects:
- *         clip:
- *           type: PersistedJoinAliasMapper
- *           tableName: sys_file
- *           joinTableName: sys_file_metadata
- *           joinCondition: sys_file.uid = sys_file_metadata.file
- *           # uses the field name of the join table, no table prefix!
- *           routeFieldName: title
+ * Class PersistedJoinAliasMapper.
  */
 class PersistedJoinAliasMapper extends PersistedAliasMapper
 {
@@ -52,7 +33,6 @@ class PersistedJoinAliasMapper extends PersistedAliasMapper
 
     /**
      * PersistedJoinAliasMapper constructor.
-     * @param array $settings
      */
     public function __construct(array $settings)
     {
@@ -62,16 +42,10 @@ class PersistedJoinAliasMapper extends PersistedAliasMapper
         $joinCondition = $settings['joinCondition'] ?? null;
 
         if (!is_string($joinTableName)) {
-            throw new \InvalidArgumentException(
-                'joinTableName must be string',
-                1537277141
-            );
+            throw new \InvalidArgumentException('joinTableName must be string', 1537277141);
         }
         if (!is_string($joinCondition)) {
-            throw new \InvalidArgumentException(
-                'joinCondition must be string',
-                1537277142
-            );
+            throw new \InvalidArgumentException('joinCondition must be string', 1537277142);
         }
 
         $this->joinTableName = $joinTableName;
@@ -114,7 +88,7 @@ class PersistedJoinAliasMapper extends PersistedAliasMapper
             ->execute()
             ->fetchAssociative();
 
-        return $result !== false ? $result : null;
+        return false !== $result ? $result : null;
     }
 
     /**
@@ -139,6 +113,6 @@ class PersistedJoinAliasMapper extends PersistedAliasMapper
             ->execute()
             ->fetchAssociative();
 
-        return $result !== false ? $result : null;
+        return false !== $result ? $result : null;
     }
 }

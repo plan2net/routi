@@ -1,17 +1,15 @@
-<?php /** @noinspection PhpMissingFieldTypeInspection */
+<?php
+
+/** @noinspection PhpMissingFieldTypeInspection */
 
 declare(strict_types=1);
 
 namespace Plan2net\Routi\Routing\Aspect;
 
-use InvalidArgumentException;
 use TYPO3\CMS\Core\Routing\Aspect\StaticMappableAspectInterface;
 
 /**
- * Class StaticIntegerRangeMapper
- *
- * @package Plan2net\Routi\Routing\Aspect
- * @author Wolfgang Klinger <wk@plan2.net>
+ * Class StaticIntegerRangeMapper.
  */
 class StaticIntegerRangeMapper implements StaticMappableAspectInterface, \Countable
 {
@@ -26,8 +24,7 @@ class StaticIntegerRangeMapper implements StaticMappableAspectInterface, \Counta
     protected $end;
 
     /**
-     * @param array $settings
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function __construct(array $settings)
     {
@@ -37,8 +34,8 @@ class StaticIntegerRangeMapper implements StaticMappableAspectInterface, \Counta
         if (!is_numeric($settings['end'])) {
             throw new \InvalidArgumentException('end must be a number', 1577297577);
         }
-        $this->start = (int)$settings['start'];
-        $this->end = (int)$settings['end'];
+        $this->start = (int) $settings['start'];
+        $this->end = (int) $settings['end'];
     }
 
     public function count(): int

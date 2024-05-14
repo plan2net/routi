@@ -11,7 +11,7 @@ $EM_CONF['routi'] = [
     'author_company' => 'plan2net GmbH',
     'constraints' => [
         'depends' => [
-            'typo3' => '9.5.16-12.4.99'
-        ]
-    ]
+            'typo3' => '9.5.16-12.4.99',
+        ],
+    ],
 ];

@@ -11,9 +11,28 @@
       "Plan2net\\Routi\\": "Classes"
     }
   },
+  "scripts": {
+    "php-cs-fixer": [
+      "./.Build/bin/php-cs-fixer fix --dry-run -v --diff --config=./Build/php-cs-fixer.config.php"
+    ],
+    "php-cs-fixer:fix": [
+      "./.Build/bin/php-cs-fixer fix -v --config=./Build/php-cs-fixer.config.php"
+    ]
+  },
   "extra": {
     "typo3/cms": {
       "extension-key": "routi"
+    }
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^3.56"
+  },
+  "config": {
+    "vendor-dir": ".Build/vendor",
+    "bin-dir": ".Build/bin",
+    "allow-plugins": {
+      "typo3/cms-composer-installers": true,
+      "typo3/class-alias-loader": true
     }
   }
 }
