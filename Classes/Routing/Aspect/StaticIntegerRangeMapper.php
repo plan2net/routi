@@ -7,23 +7,11 @@ namespace Plan2net\Routi\Routing\Aspect;
 use InvalidArgumentException;
 use TYPO3\CMS\Core\Routing\Aspect\StaticMappableAspectInterface;
 
-/**
- * Class StaticIntegerRangeMapper
- *
- * @package Plan2net\Routi\Routing\Aspect
- * @author Wolfgang Klinger <wk@plan2.net>
- */
-class StaticIntegerRangeMapper implements StaticMappableAspectInterface, \Countable
+final class StaticIntegerRangeMapper implements StaticMappableAspectInterface, \Countable
 {
-    /**
-     * @var int
-     */
-    protected $start;
+    protected readonly int $start;
 
-    /**
-     * @var int
-     */
-    protected $end;
+    protected readonly int $end;
 
     /**
      * @param array $settings
@@ -37,8 +25,24 @@ class StaticIntegerRangeMapper implements StaticMappableAspectInterface, \Counta
         if (!is_numeric($settings['end'])) {
             throw new \InvalidArgumentException('end must be a number', 1577297577);
         }
+
         $this->start = (int)$settings['start'];
         $this->end = (int)$settings['end'];
+
+        if ($this->start < 0) {
+            throw new \InvalidArgumentException('start must be larger than zero', 1577297579);
+        }
+
+        if ($this->end <= $this->start) {
+            throw new \InvalidArgumentException('end must be larger than start', 1577297578);
+        }
+
+        if (($this->end - $this->start) > 1000) {
+            throw new \LengthException(
+                'Range is larger than 1000 items',
+                1537696771
+            );
+        }
     }
 
     public function count(): int
@@ -48,11 +52,16 @@ class StaticIntegerRangeMapper implements StaticMappableAspectInterface, \Counta
 
     public function generate(string $value): ?string
     {
-        return (int) $value >= $this->start && (int) $value <= $this->end ? $value : null;
+        return $this->respondWhenInRange($value);
     }
 
     public function resolve(string $value): ?string
     {
-        return (int) $value >= $this->start && (int) $value <= $this->end ? $value : null;
+        return $this->respondWhenInRange($value);
+    }
+
+    private function respondWhenInRange(string $value): ?string
+    {
+        return ((int) $value >= $this->start && (int) $value <= $this->end) ? $value : null;
     }
 }

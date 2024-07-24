@@ -7,41 +7,13 @@ namespace Plan2net\Routi\Routing\Aspect;
 use InvalidArgumentException;
 use TYPO3\CMS\Core\Routing\Aspect\StaticRangeMapper;
 
-/**
- * Class StaticPaddedRangeMapper
- *
- * @package Plan2net\Routi\Routing\Aspect
- * @author Wolfgang Klinger <wk@plan2.net>
- *
- * Example:
- *   routeEnhancers:
- *      …
- *       aspects:
- *         field:
- *           type: StaticPaddedRangeMapper
- *           start: '1'
- *           end: '12'
- *           padString: '0'
- *           padLength: 1
- *           # STR_PAD_LEFT = 0
- *           padType: 0
- */
-class StaticPaddedRangeMapper extends StaticRangeMapper
+final class StaticPaddedRangeMapper extends StaticRangeMapper
 {
-    /**
-     * @var string
-     */
-    protected $padString = '';
+    private string $padString = '';
 
-    /**
-     * @var int
-     */
-    protected $padLength = 0;
+    private int $padLength = 0;
 
-    /**
-     * @var int
-     */
-    protected $padType = 0;
+    private int $padType = STR_PAD_LEFT;
 
     /**
      * @param array $settings
@@ -71,10 +43,10 @@ class StaticPaddedRangeMapper extends StaticRangeMapper
             throw new InvalidArgumentException('padLength must be string', 1538277166);
         }
         if (!is_int($padType)) {
-            throw new InvalidArgumentException('padType must be string', 1538277167);
+            throw new InvalidArgumentException('padType must be integer', 1538277167);
         }
         if (!in_array($padType, [STR_PAD_LEFT, STR_PAD_RIGHT, STR_PAD_BOTH], true)) {
-            throw new InvalidArgumentException('padType must be valid', 1538277168);
+            throw new InvalidArgumentException('padType must be valid (0, 1, 2)', 1538277168);
         }
 
         $this->settings = $settings;
