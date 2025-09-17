@@ -34,7 +34,7 @@ class PageRouter extends \TYPO3\CMS\Core\Routing\PageRouter
             if (is_string($limitToPages)) {
                 $limitToPages = GeneralUtility::intExplode(',', $limitToPages);
             }
-            // Check if there is a restriction to page Ids.
+            // Check if there is a restriction to page IDs.
             if (is_array($limitToPages) && !empty($limitToPages) && !in_array($pageId, $limitToPages, true)) {
                 continue;
             }

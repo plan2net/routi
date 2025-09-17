@@ -6,6 +6,8 @@ declare(strict_types=1);
 namespace Plan2net\Routi\Routing\Aspect;
 
 use Doctrine\DBAL\Driver\Exception;
+use Doctrine\DBAL\ParameterType;
+use Override;
 use TYPO3\CMS\Core\Routing\Aspect\PersistedAliasMapper;
 use TYPO3\CMS\Core\Routing\Aspect\PersistenceDelegate;
 use TYPO3\CMS\Core\Site\SiteLanguageAwareTrait;
@@ -40,15 +42,9 @@ class PersistedJoinAliasMapper extends PersistedAliasMapper
     // using a trait
     use SiteLanguageAwareTrait;
 
-    /**
-     * @var string
-     */
-    protected $joinTableName;
+    protected string $joinTableName;
 
-    /**
-     * @var string
-     */
-    protected $joinCondition;
+    protected string $joinCondition;
 
     /**
      * PersistedJoinAliasMapper constructor.
@@ -81,6 +77,7 @@ class PersistedJoinAliasMapper extends PersistedAliasMapper
     /**
      * @return string[]
      */
+    #[Override]
     protected function buildPersistenceFieldNames(): array
     {
         return array_filter([
@@ -95,7 +92,9 @@ class PersistedJoinAliasMapper extends PersistedAliasMapper
     /**
      * @throws Exception
      * @throws \Exception
+     * @throws \Doctrine\DBAL\Exception
      */
+    #[Override]
     protected function findByIdentifier(string $value): ?array
     {
         $queryBuilder = $this->createQueryBuilder();
@@ -109,9 +108,9 @@ class PersistedJoinAliasMapper extends PersistedAliasMapper
             )
             ->where($queryBuilder->expr()->eq(
                 $this->tableName . '.uid',
-                $queryBuilder->createNamedParameter($value, \PDO::PARAM_INT)
+                $queryBuilder->createNamedParameter($value, ParameterType::INTEGER)
             ))
-            ->execute()
+            ->executeQuery()
             ->fetchAssociative();
 
         return $result !== false ? $result : null;
@@ -119,8 +118,9 @@ class PersistedJoinAliasMapper extends PersistedAliasMapper
 
     /**
      * @throws Exception
-     * @throws \Exception
+     * @throws \Doctrine\DBAL\Exception
      */
+    #[Override]
     protected function findByRouteFieldValue(string $value): ?array
     {
         $queryBuilder = $this->createQueryBuilder();
@@ -134,9 +134,9 @@ class PersistedJoinAliasMapper extends PersistedAliasMapper
             )
             ->where($queryBuilder->expr()->eq(
                 $this->joinTableName . '.' . $this->routeFieldName,
-                $queryBuilder->createNamedParameter($value, \PDO::PARAM_STR)
+                $queryBuilder->createNamedParameter($value)
             ))
-            ->execute()
+            ->executeQuery()
             ->fetchAssociative();
 
         return $result !== false ? $result : null;

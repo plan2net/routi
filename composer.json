@@ -2,18 +2,37 @@
   "name": "plan2net/routi",
   "description": "The little TYPO3 CMS routing helpers",
   "type": "typo3-cms-extension",
+  "license": "GPL-2.0-or-later",
   "require": {
+    "php": "^8.2",
     "ext-pdo": "*",
-    "typo3/cms-core": "^9.5.16 || ^10.4 || ^11.5 || ^12.4"
+    "typo3/cms-core": "^12.4 || ^13.4"
   },
   "autoload": {
     "psr-4": {
       "Plan2net\\Routi\\": "Classes"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Plan2net\\Routi\\Tests\\": "Tests"
+    }
+  },
   "extra": {
     "typo3/cms": {
       "extension-key": "routi"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^11"
+  },
+  "scripts": {
+    "test": "phpunit"
+  },
+  "config": {
+    "allow-plugins": {
+      "typo3/cms-composer-installers": true,
+      "typo3/class-alias-loader": true
     }
   }
 }

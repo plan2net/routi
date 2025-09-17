@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Plan2net\Routi\Routing\Aspect;
 
 use InvalidArgumentException;
+use Override;
 use TYPO3\CMS\Core\Routing\Aspect\StaticMappableAspectInterface;
 
 /**
@@ -15,15 +16,9 @@ use TYPO3\CMS\Core\Routing\Aspect\StaticMappableAspectInterface;
  */
 class StaticIntegerRangeMapper implements StaticMappableAspectInterface, \Countable
 {
-    /**
-     * @var int
-     */
-    protected $start;
+    protected int $start;
 
-    /**
-     * @var int
-     */
-    protected $end;
+    protected int $end;
 
     /**
      * @param array $settings
@@ -41,16 +36,19 @@ class StaticIntegerRangeMapper implements StaticMappableAspectInterface, \Counta
         $this->end = (int)$settings['end'];
     }
 
+    #[Override]
     public function count(): int
     {
         return $this->end - $this->start;
     }
 
+    #[Override]
     public function generate(string $value): ?string
     {
         return (int) $value >= $this->start && (int) $value <= $this->end ? $value : null;
     }
 
+    #[Override]
     public function resolve(string $value): ?string
     {
         return (int) $value >= $this->start && (int) $value <= $this->end ? $value : null;

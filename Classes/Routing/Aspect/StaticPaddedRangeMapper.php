@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Plan2net\Routi\Routing\Aspect;
 
 use InvalidArgumentException;
+use Override;
 use TYPO3\CMS\Core\Routing\Aspect\StaticRangeMapper;
 
 /**
@@ -28,20 +29,11 @@ use TYPO3\CMS\Core\Routing\Aspect\StaticRangeMapper;
  */
 class StaticPaddedRangeMapper extends StaticRangeMapper
 {
-    /**
-     * @var string
-     */
-    protected $padString = '';
+    protected string $padString = '';
 
-    /**
-     * @var int
-     */
-    protected $padLength = 0;
+    protected int $padLength = 0;
 
-    /**
-     * @var int
-     */
-    protected $padType = 0;
+    protected int $padType = 0;
 
     /**
      * @param array $settings
@@ -68,10 +60,10 @@ class StaticPaddedRangeMapper extends StaticRangeMapper
             throw new InvalidArgumentException('padString must be string', 1538277165);
         }
         if (!is_int($padLength)) {
-            throw new InvalidArgumentException('padLength must be string', 1538277166);
+            throw new InvalidArgumentException('padLength must be integer', 1538277166);
         }
         if (!is_int($padType)) {
-            throw new InvalidArgumentException('padType must be string', 1538277167);
+            throw new InvalidArgumentException('padType must be integer', 1538277167);
         }
         if (!in_array($padType, [STR_PAD_LEFT, STR_PAD_RIGHT, STR_PAD_BOTH], true)) {
             throw new InvalidArgumentException('padType must be valid', 1538277168);
@@ -91,6 +83,7 @@ class StaticPaddedRangeMapper extends StaticRangeMapper
     /**
      * @return array
      */
+    #[Override]
     protected function buildRange(): array
     {
         $padString = $this->padString;
