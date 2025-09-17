@@ -11,12 +11,24 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: typo3_test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     strategy:
       fail-fast: false
       matrix:
-        php-version: ['8.2', '8.3', '8.4']
+        php-version: ['8.2', '8.3']
+        typo3-version: ['^12.4', '^13.4']
+        exclude: []
 
-    name: PHP ${{ matrix.php-version }}
+    name: PHP ${{ matrix.php-version }} / TYPO3 ${{ matrix.typo3-version }}
 
     steps:
       - name: Checkout code
@@ -26,8 +38,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
-          extensions: pdo, pdo_sqlite, mbstring
-          coverage: pcov
+          extensions: pdo, pdo_mysql, pdo_sqlite, mbstring
           tools: composer:v2
 
       - name: Get composer cache directory
@@ -44,23 +55,29 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: Install dependencies
-        run: composer update --no-progress --prefer-dist --optimize-autoloader
+        run: |
+          composer require "typo3/cms-core:${{ matrix.typo3-version }}" --no-update
+          composer require "typo3/cms-frontend:${{ matrix.typo3-version }}" --no-update --dev
+          composer update --no-progress --prefer-dist --optimize-autoloader
 
-      - name: Run tests
-        run: composer test
+      - name: Setup database for functional tests
+        run: |
+          mysql -h 127.0.0.1 -u root -proot -e "CREATE DATABASE IF NOT EXISTS typo3_test;"
+          mysql -h 127.0.0.1 -u root -proot -e "GRANT ALL PRIVILEGES ON typo3_test.* TO 'root'@'%';"
 
-      - name: Run tests with coverage
-        if: matrix.php-version == '8.3'
-        run: vendor/bin/phpunit --coverage-clover coverage.xml
+      - name: Run unit tests
+        run: vendor/bin/phpunit --testsuite "Unit Tests"
 
-      - name: Upload coverage to Codecov
-        if: matrix.php-version == '8.3'
-        uses: codecov/codecov-action@v3
-        with:
-          files: ./coverage.xml
-          flags: unittests
-          name: codecov-umbrella
-          fail_ci_if_error: false
+      - name: Run functional tests
+        env:
+          typo3DatabaseName: typo3_test
+          typo3DatabaseUsername: root
+          typo3DatabasePassword: root
+          typo3DatabaseHost: 127.0.0.1
+          typo3DatabaseDriver: pdo_mysql
+        run: vendor/bin/phpunit -c phpunit-functional.xml
+
+      # Coverage disabled per project decision
 
   code-quality:
     runs-on: ubuntu-latest

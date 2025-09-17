@@ -52,8 +52,6 @@ class PersistedJoinAliasMapper extends PersistedAliasMapper
      */
     public function __construct(array $settings)
     {
-        parent::__construct($settings);
-
         $joinTableName = $settings['joinTableName'] ?? null;
         $joinCondition = $settings['joinCondition'] ?? null;
 
@@ -72,6 +70,8 @@ class PersistedJoinAliasMapper extends PersistedAliasMapper
 
         $this->joinTableName = $joinTableName;
         $this->joinCondition = $joinCondition;
+
+        parent::__construct($settings);
     }
 
     /**
